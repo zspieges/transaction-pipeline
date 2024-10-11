@@ -1,0 +1,43 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2639
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 FOR NOLAN (pot. hiring manager)\
+\
+Current Limitations With the Pipeline:
+\f1\b0 \
+1. Cannot handle a duplicate file ingestion.\
+	a. If the same file is put into a folder twice, the current pipeline will throw an error due to duplicate records and will stop. \
+	b. The moving of the file from it\'92s home folder to the archive folder will also break as the current mover function doesn\'92t know how to deal with if a file already exists.\
+	c. HOWEVER, I think it would be good to add the date suffix to the end of the file when it\'92s move (either the date it came from, the date it was ingested or both) so that if a second file exists and has different data, we can ingest that file and it\'92s new data as well.\
+\
+
+\f0\b Current Issues with Pipeline/Data:
+\f1\b0 \
+1. I don\'92t think I set up the vent properly. Despite running the following 2 commands:\
+\pard\pardeftab720\partightenfactor0
+\cf0 		- echo 'export DBT_PROFILES_DIR=$(pwd)/config' >> $(pwd)/.venv/bin/activate\
+		- echo 'export DBT_PROJECT_DIR=$(pwd)/dbt_project' >> $(pwd)/.venv/bin/activate\
+You may have to rerun them when running this project. \
+\
+2. Loading the transactions_raw.csv takes the biggest chunk of time (~5mins). If this process were to increase in 100x (~500 mins), I don\'92t think it would be sustainable to continue using the .csv method. What may work is directly connecting the python script to the Postgres database and try to push the data to the DB and use it as a source that way. I considered doing this but was running low on time.\
+\
+3. There are customer_ids in the transactions table that are not in the customers table. I assumed that these were non customers and therefore, were un-interesting to the end question. Still worthy to note.\
+\
+4. The incremental where statement may be too clunky. It runs fine but I wonder if maybe it makes sense to bring the load in date to the clean transactions table and pull the incremental comparison form there. There also may be issues in running that on a 100x scale as it is a subquery.\
+\
+5. There\'92s just not enough datapoints to run a full forecasting model. Furthermore, there wasn\'92t enough to test the accuracy of the model as well. Adding more data points would solve both of these.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b \cf0 Testing to Deploy:\
+
+\f1\b0 1. Add in more break/fix statements.\
+	a. If this doesn\'92t work then what to we do to finish the pipeline?\
+	b. If this isn\'92t formatted correctly then how to we reformat?\
+2. Scaling up testing.\
+	a. Increase file batch 10x to see how inserts improve.\
+}
